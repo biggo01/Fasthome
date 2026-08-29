@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Mes visites - Fasthome{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: var(--spacing-xl) 0;">
+    <h1 style="font-size: var(--font-size-2xl);"><i class="fas fa-calendar-alt"></i> Mes visites</h1>
+    <p style="color: var(--gray-600); margin-bottom: var(--spacing-xl);">Suivez chaque demande de visite de bout en bout.</p>
+
+    <!-- Filtres (onglets) -->
+    <div style="display: flex; gap: var(--spacing-sm); margin-bottom: var(--spacing-lg); flex-wrap: wrap; border-bottom: 2px solid var(--gray-200); padding-bottom: var(--spacing-sm);">
+        <button class="tab-btn active" data-filter="all" style="background: none; border: none; padding: 0.4rem 1.2rem; font-weight: 600; color: var(--primary); border-bottom: 3px solid var(--primary); cursor: pointer; transition: var(--transition);">Toutes</button>
+        <button class="tab-btn" data-filter="en-attente" style="background: none; border: none; padding: 0.4rem 1.2rem; font-weight: 600; color: var(--gray-600); border-bottom: 3px solid transparent; cursor: pointer; transition: var(--transition);">En attente</button>
+        <button class="tab-btn" data-filter="confirmee" style="background: none; border: none; padding: 0.4rem 1.2rem; font-weight: 600; color: var(--gray-600); border-bottom: 3px solid transparent; cursor: pointer; transition: var(--transition);">Confirmées</button>
+        <button class="tab-btn" data-filter="terminee" style="background: none; border: none; padding: 0.4rem 1.2rem; font-weight: 600; color: var(--gray-600); border-bottom: 3px solid transparent; cursor: pointer; transition: var(--transition);">Terminées</button>
+    </div>
+
+    <!-- Liste des visites -->
+    <div id="visites-list" style="display: flex; flex-direction: column; gap: var(--spacing-md);">
+        {% for demande in demandes %}
+        <div class="visite-item" data-status="{{ demande.statut|lower }}" style="background: var(--white); border-radius: var(--radius-lg); padding: var(--spacing-md); box-shadow: var(--shadow-sm); border-left: 4px solid 
+            {% if demande.statut == 'DEMANDEE' %}var(--warning)
+            {% elif demande.statut == 'PROGRAMMEE' %}var(--info)
+            {% elif demande.statut == 'REALISEE' %}var(--success)
+            {% elif demande.statut == 'CLOTUREE' %}var(--gray-500)
+            {% else %}var(--gray-300){% endif %};">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: var(--spacing-sm);">
+                <div>
+                    <h4 style="font-size: var(--font-size-base); margin-bottom: var(--spacing-xs);">{{ demande.logement.titre }}</h4>
+                    <p style="color: var(--gray-600); font-size: var(--font-size-sm); margin-bottom: var(--spacing-xs);">
+                        <i class="fas fa-map-marker-alt"></i> {{ demande.logement.ville }}
+                        {% if demande.logement.quartier %} · {{ demande.logement.quartier }}{% endif %}
+                    </p>
+                    <p style="font-size: var(--font-size-sm); color: var(--gray-700);">
+                        <i class="fas fa-calendar-day"></i> {{ demande.date_souhaitee|date:"l d F Y" }} · 
+                        <i class="fas fa-clock"></i> {{ demande.creneau_debut|time:"H:i" }}
+                    </p>
+                </div>
+                <div style="text-align: right;">
+                    <span class="badge-status 
+                        {% if demande.statut == 'DEMANDEE' %}en-attente
+                        {% elif demande.statut == 'PROGRAMMEE' %}programme
+                        {% elif demande.statut == 'REALISEE' %}valide
+                        {% elif demande.statut == 'CLOTUREE' %}termine
+                        {% else %}refuse{% endif %}">
+                        {% if demande.statut == 'DEMANDEE' %}<i class="fas fa-clock"></i> En vérification
+                        {% elif demande.statut == 'PROGRAMMEE' %}<i class="fas fa-check-circle"></i> Confirmée
+                        {% elif demande.statut == 'REALISEE' %}<i class="fas fa-check-double"></i> Réalisée
+                        {% elif demande.statut == 'CLOTUREE' %}<i class="fas fa-check"></i> Clôturée
+                        {% else %}{{ demande.get_statut_display }}{% endif %}
+                    </span>
+                    {% if demande.statut == 'REALISEE' %}
+                    <p style="font-size: var(--font-size-xs); color: var(--success); margin-top: var(--spacing-xs);"><i class="fas fa-file-alt"></i> Compte rendu disponible</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div style="margin-top: var(--spacing-sm); display: flex; gap: var(--spacing-sm); flex-wrap: wrap;">
+                {% if demande.statut == 'DEMANDEE' %}
+                <button class="btn btn-sm btn-outline">Annuler</button>
+                {% endif %}
+                {% if demande.statut == 'PROGRAMMEE' %}
+                <button class="btn btn-sm btn-outline"><i class="fas fa-calendar-plus"></i> Modifier</button>
+                {% endif %}
+                {% if demande.statut == 'REALISEE' %}
+                <button class="btn btn-sm btn-primary"><i class="fas fa-file-alt"></i> Voir compte rendu</button>
+                {% endif %}
+            </div>
+        </div>
+        {% empty %}
+        <p style="text-align: center; color: var(--gray-500); padding: var(--spacing-xl);">Aucune demande de visite.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const items = document.querySelectorAll('.visite-item');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            tabs.forEach(t => {
+                t.classList.remove('active');
+                t.style.color = 'var(--gray-600)';
+                t.style.borderBottomColor = 'transparent';
+            });
+            this.classList.add('active');
+            this.style.color = 'var(--primary)';
+            this.style.borderBottomColor = 'var(--primary)';
+
+            const filter = this.dataset.filter;
+            items.forEach(item => {
+                if (filter === 'all' || item.dataset.status === filter) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}
