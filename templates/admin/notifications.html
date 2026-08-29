@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Notifications - Fasthome{% endblock %}
+
+{% block content %}
+<div class="container" style="display: flex; gap: var(--spacing-xl); padding: var(--spacing-xl) 0;">
+    <!-- Sidebar Admin -->
+    <aside style="min-width: 220px; background: var(--white); border-radius: var(--radius-lg); padding: var(--spacing-lg); box-shadow: var(--shadow-sm); height: fit-content;">
+        <ul style="list-style: none; padding: 0; margin: 0;">
+            <li style="margin-bottom: var(--spacing-sm);"><a href="{% url 'admin_dashboard' %}" style="display: flex; align-items: center; gap: var(--spacing-sm); padding: 0.6rem 0.8rem; border-radius: var(--radius-md); color: var(--gray-700);"><i class="fas fa-chart-pie"></i> Dashboard</a></li>
+            <li style="margin-bottom: var(--spacing-sm);"><a href="{% url 'admin_utilisateurs' %}" style="display: flex; align-items: center; gap: var(--spacing-sm); padding: 0.6rem 0.8rem; border-radius: var(--radius-md); color: var(--gray-700);"><i class="fas fa-users"></i> Utilisateurs</a></li>
+            <li style="margin-bottom: var(--spacing-sm);"><a href="{% url 'admin_logements' %}" style="display: flex; align-items: center; gap: var(--spacing-sm); padding: 0.6rem 0.8rem; border-radius: var(--radius-md); color: var(--gray-700);"><i class="fas fa-home"></i> Logements</a></li>
+            <li style="margin-bottom: var(--spacing-sm);"><a href="{% url 'admin_agents' %}" style="display: flex; align-items: center; gap: var(--spacing-sm); padding: 0.6rem 0.8rem; border-radius: var(--radius-md); color: var(--gray-700);"><i class="fas fa-user-tie"></i> Agents</a></li>
+            <li style="margin-bottom: var(--spacing-sm);"><a href="{% url 'admin_analytics' %}" style="display: flex; align-items: center; gap: var(--spacing-sm); padding: 0.6rem 0.8rem; border-radius: var(--radius-md); color: var(--gray-700);"><i class="fas fa-chart-line"></i> Analytics</a></li>
+            <li><a href="#" style="display: flex; align-items: center; gap: var(--spacing-sm); padding: 0.6rem 0.8rem; border-radius: var(--radius-md); background: var(--primary-light); color: var(--primary); font-weight: 600;"><i class="fas fa-bell"></i> Notifications</a></li>
+        </ul>
+    </aside>
+
+    <!-- Contenu principal -->
+    <main style="flex: 1;">
+        <h1 style="font-size: var(--font-size-2xl); margin-bottom: var(--spacing-xs);"><i class="fas fa-bell"></i> Notifications</h1>
+        <p style="color: var(--gray-600); margin-bottom: var(--spacing-xl);">Toutes les informations importantes de votre compte.</p>
+
+        <div style="background: var(--white); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); overflow: hidden;">
+            <!-- Notification 1 -->
+            <div style="display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md) var(--spacing-lg); border-bottom: 1px solid var(--gray-200); transition: var(--transition);">
+                <div style="width: 40px; height: 40px; background: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--primary); flex-shrink: 0;">
+                    <i class="fas fa-search"></i>
+                </div>
+                <div style="flex: 1;">
+                    <strong style="display: block; font-size: var(--font-size-base);">Nouvelle correspondance</strong>
+                    <span style="color: var(--gray-600); font-size: var(--font-size-sm);">3 logements correspondent à vos critères.</span>
+                </div>
+                <span style="font-size: var(--font-size-xs); color: var(--gray-500); white-space: nowrap;">Il y a 2h</span>
+                <span style="background: var(--danger); color: var(--white); font-size: var(--font-size-xs); padding: 0.15rem 0.6rem; border-radius: var(--radius-full); font-weight: 600;">Nouveau</span>
+            </div>
+
+            <!-- Notification 2 -->
+            <div style="display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md) var(--spacing-lg); border-bottom: 1px solid var(--gray-200);">
+                <div style="width: 40px; height: 40px; background: #d4edda; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--success); flex-shrink: 0;">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div style="flex: 1;">
+                    <strong style="display: block; font-size: var(--font-size-base);">Visite confirmée</strong>
+                    <span style="color: var(--gray-600); font-size: var(--font-size-sm);">Votre visite est confirmée pour samedi.</span>
+                </div>
+                <span style="font-size: var(--font-size-xs); color: var(--gray-500); white-space: nowrap;">Hier</span>
+            </div>
+
+            <!-- Notification 3 -->
+            <div style="display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md) var(--spacing-lg); border-bottom: 1px solid var(--gray-200);">
+                <div style="width: 40px; height: 40px; background: #cce5ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--info); flex-shrink: 0;">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div style="flex: 1;">
+                    <strong style="display: block; font-size: var(--font-size-base);">Document validé</strong>
+                    <span style="color: var(--gray-600); font-size: var(--font-size-sm);">Votre document a été accepté.</span>
+                </div>
+                <span style="font-size: var(--font-size-xs); color: var(--gray-500); white-space: nowrap;">2 jours</span>
+            </div>
+
+            <!-- Notification 4 -->
+            <div style="display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md) var(--spacing-lg); border-bottom: 1px solid var(--gray-200);">
+                <div style="width: 40px; height: 40px; background: #fff3cd; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--warning); flex-shrink: 0;">
+                    <i class="fas fa-home"></i>
+                </div>
+                <div style="flex: 1;">
+                    <strong style="display: block; font-size: var(--font-size-base);">Logement publié</strong>
+                    <span style="color: var(--gray-600); font-size: var(--font-size-sm);">Votre annonce est maintenant visible.</span>
+                </div>
+                <span style="font-size: var(--font-size-xs); color: var(--gray-500); white-space: nowrap;">3 jours</span>
+            </div>
+
+            <!-- Notification 5 -->
+            <div style="display: flex; align-items: center; gap: var(--spacing-md); padding: var(--spacing-md) var(--spacing-lg);">
+                <div style="width: 40px; height: 40px; background: #f8d7da; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--danger); flex-shrink: 0;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div style="flex: 1;">
+                    <strong style="display: block; font-size: var(--font-size-base);">Action nécessaire</strong>
+                    <span style="color: var(--gray-600); font-size: var(--font-size-sm);">Complétez votre profil.</span>
+                </div>
+                <span style="font-size: var(--font-size-xs); color: var(--gray-500); white-space: nowrap;">5 jours</span>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
