@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+<!-- ========== HERO ========== -->
+<section class="hero">
+    <div class="hero-slider">
+        <div class="slide active">
+            <i class="fas fa-home" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+            <strong>Trouvez un logement qui vous ressemble.</strong><br>
+            Définissez vos critères essentiels. Fasthome recherche les logements qui correspondent réellement à votre demande.
+        </div>
+        <div class="slide">
+            <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+            <strong>Ne perdez plus votre temps.</strong><br>
+            Notre système compare vos critères avec les caractéristiques des logements disponibles.
+        </div>
+        <div class="slide">
+            <i class="fas fa-check-circle" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+            <strong>Des résultats fondés sur vos besoins.</strong><br>
+            Localisation, budget, composition et équipements sont analysés avant de vous présenter les logements pertinents.
+        </div>
+        <div class="slide">
+            <i class="fas fa-key" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+            <strong>Votre logement mérite le bon locataire.</strong><br>
+            Présentez votre logement à des personnes dont la recherche correspond à ses caractéristiques.
+        </div>
+        <div class="slide">
+            <i class="fas fa-upload" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+            <strong>Publiez. Présentez. Suivez.</strong><br>
+            Fasthome structure votre publication et accompagne le parcours jusqu'au suivi de la location.
+        </div>
+        <div class="slide">
+            <i class="fas fa-clock" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+            <strong>Réduisez le temps d'attente.</strong><br>
+            Une présentation claire et des critères structurés permettent de mieux identifier les recherches pertinentes.
+        </div>
+    </div>
+    <div class="hero-actions">
+        <a href="{% url 'recherche' %}" class="btn btn-primary btn-lg">
+            <i class="fas fa-search"></i> Je cherche un logement
+        </a>
+        <a href="{% url 'publier_wizard' %}" class="btn btn-secondary btn-lg">
+            <i class="fas fa-home"></i> Je veux louer mon logement
+        </a>
+    </div>
+</section>
+
+<!-- ========== LOGEMENTS DISPONIBLES ========== -->
+<section class="section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Logements disponibles</h2>
+            <p>Découvrez les logements vérifiés par Fasthome</p>
+        </div>
+        <div class="grid-2-cols">
+            {% for logement in logements %}
+            <div class="card-logement">
+                <div class="card-image">
+                    {% if logement.photos.first %}
+                    <img src="{{ logement.photos.first.image.url }}" alt="{{ logement.titre }}">
+                    {% else %}
+                    <img src="{% static 'img/default.jpg' %}" alt="Photo par défaut">
+                    {% endif %}
+                    <button class="favori-btn" data-logement-id="{{ logement.id }}">
+                        {% if logement.id in favoris_ids %}
+                        <i class="fas fa-heart liked"></i>
+                        {% else %}
+                        <i class="far fa-heart"></i>
+                        {% endif %}
+                    </button>
+                    {% if logement.statut == 'DISPONIBLE' %}
+                    <span class="badge-verifie"><i class="fas fa-check-circle"></i> Vérifié</span>
+                    {% endif %}
+                </div>
+                <div class="card-body">
+                    <h3>{{ logement.get_type_logement_display }}</h3>
+                    <p class="location">
+                        <i class="fas fa-map-marker-alt"></i> {{ logement.ville }}
+                        {% if logement.quartier %} · {{ logement.quartier }}{% endif %}
+                    </p>
+                    <p class="details">
+                        <i class="fas fa-bed"></i> {{ logement.nb_chambres }} chambre{{ logement.nb_chambres|pluralize }}
+                        · <i class="fas fa-couch"></i> {{ logement.nb_salons }} salon{{ logement.nb_salons|pluralize }}
+                    </p>
+                    <span class="loyer-masque"><i class="fas fa-lock"></i> Loyer selon parcours Fasthome</span>
+                    <a href="{% url 'detail_logement' logement.id %}" class="btn btn-primary">
+                        <i class="fas fa-eye"></i> Voir le logement
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <p>Aucun logement disponible actuellement.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}
