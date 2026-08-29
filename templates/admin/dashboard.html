@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Administration - Fasthome{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1><i class="fas fa-crown"></i> Administration</h1>
+    <p>Vue globale de la plateforme Fasthome.</p>
+
+    <div class="admin-stats">
+        <div class="stat-card">
+            <span class="stat-number">{{ users_count }}</span>
+            <span class="stat-label"><i class="fas fa-users"></i> Utilisateurs actifs</span>
+        </div>
+        <div class="stat-card" style="border-left-color: var(--success);">
+            <span class="stat-number">{{ logements_count }}</span>
+            <span class="stat-label"><i class="fas fa-home"></i> Logements publiés</span>
+        </div>
+        <div class="stat-card" style="border-left-color: var(--info);">
+            <span class="stat-number">{{ visites_count }}</span>
+            <span class="stat-label"><i class="fas fa-calendar-check"></i> Visites ce mois</span>
+        </div>
+        <div class="stat-card" style="border-left-color: var(--primary);">
+            <span class="stat-number">{{ locations }}</span>
+            <span class="stat-label"><i class="fas fa-file-signature"></i> Locations finalisées</span>
+        </div>
+    </div>
+
+    <div class="points-attention">
+        <h3><i class="fas fa-exclamation-triangle"></i> Points d'attention</h3>
+        <ul>
+            <li><i class="fas fa-circle" style="color: var(--warning);"></i> 12 annonces en attente</li>
+            <li><i class="fas fa-circle" style="color: var(--danger);"></i> 3 comptes à vérifier</li>
+            <li><i class="fas fa-circle" style="color: var(--danger);"></i> 5 signalements</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
