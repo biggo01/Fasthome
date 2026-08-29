@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Publier un logement - Fasthome{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: var(--spacing-xl) 0;">
+    <h1 style="font-size: var(--font-size-2xl);"><i class="fas fa-upload"></i> Publier un logement</h1>
+    <p style="color: var(--gray-600); margin-bottom: var(--spacing-xl);">Un parcours guidé en 7 étapes, avec sauvegarde automatique.</p>
+
+    <!-- Stepper -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-xl); position: relative; padding: 0 var(--spacing-md);">
+        <div style="position: absolute; top: 50%; left: 10%; right: 10%; height: 3px; background: var(--gray-300); transform: translateY(-50%); z-index: 0;"></div>
+        <div style="position: absolute; top: 50%; left: 10%; width: 20%; height: 3px; background: var(--primary); transform: translateY(-50%); z-index: 0; transition: width 0.5s;" id="progress-bar"></div>
+        
+        <div style="display: flex; justify-content: space-between; width: 100%; position: relative; z-index: 1;">
+            <div style="text-align: center;" class="step" data-step="1">
+                <div style="width: 40px; height: 40px; background: var(--primary); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; margin: 0 auto var(--spacing-xs); border: 3px solid var(--primary);">1</div>
+                <span style="font-size: var(--font-size-xs); font-weight: 600; color: var(--primary);">Informations</span>
+            </div>
+            <div style="text-align: center;" class="step" data-step="2">
+                <div style="width: 40px; height: 40px; background: var(--gray-300); color: var(--gray-600); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; margin: 0 auto var(--spacing-xs); border: 3px solid var(--gray-300);">2</div>
+                <span style="font-size: var(--font-size-xs); font-weight: 600; color: var(--gray-500);">Localisation</span>
+            </div>
+            <div style="text-align: center;" class="step" data-step="3">
+                <div style="width: 40px; height: 40px; background: var(--gray-300); color: var(--gray-600); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; margin: 0 auto var(--spacing-xs); border: 3px solid var(--gray-300);">3</div>
+                <span style="font-size: var(--font-size-xs); font-weight: 600; color: var(--gray-500);">Composition</span>
+            </div>
+            <div style="text-align: center;" class="step" data-step="4">
+                <div style="width: 40px; height: 40px; background: var(--gray-300); color: var(--gray-600); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; margin: 0 auto var(--spacing-xs); border: 3px solid var(--gray-300);">4</div>
+                <span style="font-size: var(--font-size-xs); font-weight: 600; color: var(--gray-500);">Équipements</span>
+            </div>
+            <div style="text-align: center;" class="step" data-step="5">
+                <div style="width: 40px; height: 40px; background: var(--gray-300); color: var(--gray-600); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; margin: 0 auto var(--spacing-xs); border: 3px solid var(--gray-300);">5</div>
+                <span style="font-size: var(--font-size-xs); font-weight: 600; color: var(--gray-500);">Photos</span>
+            </div>
+            <div style="text-align: center;" class="step" data-step="6">
+                <div style="width: 40px; height: 40px; background: var(--gray-300); color: var(--gray-600); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; margin: 0 auto var(--spacing-xs); border: 3px solid var(--gray-300);">6</div>
+                <span style="font-size: var(--font-size-xs); font-weight: 600; color: var(--gray-500);">Conditions</span>
+            </div>
+            <div style="text-align: center;" class="step" data-step="7">
+                <div style="width: 40px; height: 40px; background: var(--gray-300); color: var(--gray-600); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; margin: 0 auto var(--spacing-xs); border: 3px solid var(--gray-300);">7</div>
+                <span style="font-size: var(--font-size-xs); font-weight: 600; color: var(--gray-500);">Vérification</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Étape 1 : Informations -->
+    <div class="step-content" data-step="1" style="display: block; background: var(--white); border-radius: var(--radius-lg); padding: var(--spacing-xl); box-shadow: var(--shadow-sm);">
+        <h2 style="font-size: var(--font-size-xl); margin-bottom: var(--spacing-md);"><i class="fas fa-info-circle"></i> Informations générales</h2>
+        <form id="wizard-form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="type_logement">Type de logement</label>
+                <select id="type_logement" name="type_logement" required>
+                    <option value="">Sélectionnez</option>
+                    <option value="MAISON">Maison</option>
+                    <option value="APPARTEMENT">Appartement</option>
+                    <option value="STUDIO">Studio</option>
+                    <option value="CHAMBRE">Chambre</option>
+                    <option value="AUTRE">Autre</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="etat">État du logement</label>
+                <select id="etat" name="etat" required>
+                    <option value="">Sélectionnez</option>
+                    <option value="NEUF">Neuf</option>
+                    <option value="BON">Bon état</option>
+                    <option value="RENOVER">À rénover</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="titre">Titre de l'annonce</label>
+                <input type="text" id="titre" name="titre" placeholder="Ex: Bel appartement 3 chambres" required>
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" rows="4" placeholder="Décrivez votre logement en détail..." required></textarea>
+            </div>
+            <div class="form-group">
+                <label><input type="checkbox" name="meuble"> Meublé</label>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: var(--spacing-xl);">
+                <span></span>
+                <button type="button" class="btn btn-primary next-step"><i class="fas fa-arrow-right"></i> Suivant</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Étape 2 : Localisation -->
+    <div class="step-content" data-step="2" style="display: none; background: var(--white); border-radius: var(--radius-lg); padding: var(--spacing-xl); box-shadow: var(--shadow-sm);">
+        <h2 style="font-size: var(--font-size-xl); margin-bottom: var(--spacing-md);"><i class="fas fa-map-pin"></i> Localisation</h2>
+        <div class="form-group">
+            <label for="province">Province</label>
+            <select id="province" name="province" required>
+                <option value="">Sélectionnez</option>
+                {% for province in provinces %}
+                <option value="{{ province.id }}">{{ province.nom }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="ville">Ville</label>
+            <input type="text" id="ville" name="ville" required>
+        </div>
+        <div class="form-group">
+            <label for="commune">Commune</label>
+            <input type="text" id="commune" name="commune">
+        </div>
+        <div class="form-group">
+            <label for="quartier">Quartier</label>
+            <input type="text" id="quartier" name="quartier" required>
+        </div>
+        <div class="form-group">
+            <label for="adresse">Adresse précise</label>
+            <input type="text" id="adresse" name="adresse" placeholder="Numéro, rue...">
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: var(--spacing-xl);">
+            <button type="button" class="btn btn-outline prev-step"><i class="fas fa-arrow-left"></i> Précédent</button>
+            <button type="button" class="btn btn-primary next-step"><i class="fas fa-arrow-right"></i> Suivant</button>
+        </div>
+    </div>
+
+    <!-- Étape 3 : Composition -->
+    <div class="step-content" data-step="3" style="display: none; background: var(--white); border-radius: var(--radius-lg); padding: var(--spacing-xl); box-shadow: var(--shadow-sm);">
+        <h2 style="font-size: var(--font-size-xl); margin-bottom: var(--spacing-md);"><i class="fas fa-layer-group"></i> Composition</h2>
+        <div class="form-group">
+            <label for="nb_chambres">Nombre de chambres</label>
+            <input type="number" id="nb_chambres" name="nb_chambres" min="0" required>
+        </div>
+        <div class="form-group">
+            <label for="nb_salons">Nombre de salons</label>
+            <input type="number" id="nb_salons" name="nb_salons" min="0" value="0">
+        </div>
+        <div class="form-group">
+            <label for="nb_sdb">Nombre de salles de bain</label>
+            <input type="number" id="nb_sdb" name="nb_sdb" min="0" value="0">
+        </div>
+        <div class="form-group">
+            <label for="nb_toilettes">Nombre de toilettes</label>
+            <input type="number" id="nb_toilettes" name="nb_toilettes" min="0" value="0">
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: var(--spacing-xl);">
+            <button type="button" class="btn btn-outline prev-step"><i class="fas fa-arrow-left"></i> Précédent</button>
+            <button type="button" class="btn btn-primary next-step"><i class="fas fa-arrow-right"></i> Suivant</button>
+        </div>
+    </div>
+
+    <!-- Étape 4 : Équipements -->
+    <div class="step-content" data-step="4" style="display: none; background: var(--white); border-radius: var(--radius-lg); padding: var(--spacing-xl); box-shadow: var(--shadow-sm);">
+        <h2 style="font-size: var(--font-size-xl); margin-bottom: var(--spacing-md);"><i class="fas fa-tools"></i> Équipements et services</h2>
+        <div class="form-group">
+            <label><input type="checkbox" name="eau"> <i class="fas fa-tint"></i> Eau disponible</label>
+        </div>
+        <div class="form-group">
+            <label><input type="checkbox" name="electricite"> <i class="fas fa-bolt"></i> Électricité</label>
+        </div>
+        <div class="form-group">
+            <label><input type="checkbox" name="securite"> <i class="fas fa-shield-alt"></i> Sécurité</label>
+        </div>
+        <div class="form-group">
+            <label><input type="checkbox" name="parking"> <i class="fas fa-parking"></i> Parking</label>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: var(--spacing-xl);">
+            <button type="button" class="btn btn-outline prev-step"><i class="fas fa-arrow-left"></i> Précédent</button>
+            <button type="button" class="btn btn-primary next-step"><i class="fas fa-arrow-right"></i> Suivant</button>
+        </div>
+    </div>
+
+    <!-- Étape 5 : Photos -->
+    <div class="step-content" data-step="5" style="display: none; background: var(--white); border-radius: var(--radius-lg); padding: var(--spacing-xl); box-shadow: var(--shadow-sm);">
+        <h2 style="font-size: var(--font-size-xl); margin-bottom: var(--spacing-md);"><i class="fas fa-camera"></i> Photos</h2>
+        <p style="color: var(--gray-600); margin-bottom: var(--spacing-md);">Ajoutez des photos de chaque pièce (max 5 par zone, 40 au total).</p>
+        <div class="form-group">
+            <label for="photo_zone">Zone</label>
+            <select id="photo_zone" name="zone">
+                <option value="EXT">Extérieur</option>
+                <option value="SALON">Salon</option>
+                <option value="CHAMBRE">Chambre</option>
+                <option value="CUISINE">Cuisine</option>
+                <option value="SDB">Salle de bain</option>
+                <option value="AUTRE">Autre</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="photo">Photo</label>
+            <input type="file" id="photo" name="photos" accept="image/*" multiple>
+        </div>
+        <div id="photo-preview" style="display: flex; flex-wrap: wrap; gap: var(--spacing-sm); margin-top: var(--spacing-md);"></div>
+        <div style="display: flex; justify-content: space-between; margin-top: var(--spacing-xl);">
+            <button type="button" class="btn btn-outline prev-step"><i class="fas fa-arrow-left"></i> Précédent</button>
+            <button type="button" class="btn btn-primary next-step"><i class="fas fa-arrow-right"></i> Suivant</button>
+        </div>
+    </div>
+
+    <!-- Étape 6 : Conditions -->
+    <div class="step-content" data-step="6" style="display: none; background: var(--white); border-radius: var(--radius-lg); padding: var(--spacing-xl); box-shadow: var(--shadow-sm);">
+        <h2 style="font-size: var(--font-size-xl); margin-bottom: var(--spacing-md);"><i class="fas fa-file-contract"></i> Conditions</h2>
+        <div class="form-group">
+            <label for="loyer_mensuel">Loyer mensuel (en $)</label>
+            <input type="number" id="loyer_mensuel" name="loyer_mensuel" min="0" required>
+        </div>
+        <div class="form-group">
+            <label><input type="checkbox" id="accept_conditions" required> Le propriétaire confirme que le logement peut être proposé à la sous-location.</label>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: var(--spacing-xl);">
+            <button type="button" class="btn btn-outline prev-step"><i class="fas fa-arrow-left"></i> Précédent</button>
+            <button type="button" class="btn btn-primary next-step"><i class="fas fa-arrow-right"></i> Suivant</button>
+        </div>
+    </div>
+
+    <!-- Étape 7 : Vérification -->
+    <div class="step-content" data-step="7" style="display: none; background: var(--white); border-radius: var(--radius-lg); padding: var(--spacing-xl); box-shadow: var(--shadow-sm);">
+        <h2 style="font-size: var(--font-size-xl); margin-bottom: var(--spacing-md);"><i class="fas fa-check-circle"></i> Vérification</h2>
+        <div id="recap" style="background: var(--gray-50); padding: var(--spacing-md); border-radius: var(--radius-md); margin-bottom: var(--spacing-lg);">
+            <p><strong>Type :</strong> <span id="recap-type"></span></p>
+            <p><strong>État :</strong> <span id="recap-etat"></span></p>
+            <p><strong>Localisation :</strong> <span id="recap-localisation"></span></p>
+            <p><strong>Composition :</strong> <span id="recap-composition"></span></p>
+            <p><strong>Loyer :</strong> <span id="recap-loyer"></span></p>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-top: var(--spacing-xl);">
+            <button type="button" class="btn btn-outline prev-step"><i class="fas fa-arrow-left"></i> Précédent</button>
+            <button type="submit" class="btn btn-success"><i class="fas fa-check"></i> Publier le logement</button>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let currentStep = 1;
+    const totalSteps = 7;
+    const steps = document.querySelectorAll('.step');
+    const stepContents = document.querySelectorAll('.step-content');
+    const progressBar = document.getElementById('progress-bar');
+
+    function updateStepper(step) {
+        steps.forEach((s, idx) => {
+            const num = idx + 1;
+            const circle = s.querySelector('div');
+            const label = s.querySelector('span');
+            if (num <= step) {
+                circle.style.background = 'var(--primary)';
+                circle.style.borderColor = 'var(--primary)';
+                circle.style.color = 'var(--white)';
+                label.style.color = 'var(--primary)';
+            } else {
+                circle.style.background = 'var(--gray-300)';
+                circle.style.borderColor = 'var(--gray-300)';
+                circle.style.color = 'var(--gray-600)';
+                label.style.color = 'var(--gray-500)';
+            }
+        });
+        progressBar.style.width = ((step - 1) / (totalSteps - 1) * 80 + 10) + '%';
+        stepContents.forEach((content, idx) => {
+            content.style.display = (idx + 1 === step) ? 'block' : 'none';
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    document.querySelectorAll('.next-step').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (currentStep < totalSteps) {
+                currentStep++;
+                updateStepper(currentStep);
+            }
+        });
+    });
+
+    document.querySelectorAll('.prev-step').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStepper(currentStep);
+            }
+        });
+    });
+
+    // Gestion des photos
+    document.getElementById('photo')?.addEventListener('change', function(e) {
+        const preview = document.getElementById('photo-preview');
+        preview.innerHTML = '';
+        for (const file of this.files) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                const img = document.createElement('img');
+                img.src = ev.target.result;
+                img.style.width = '100px';
+                img.style.height = '100px';
+                img.style.objectFit = 'cover';
+                img.style.borderRadius = 'var(--radius-md)';
+                img.style.border = '2px solid var(--gray-200)';
+                preview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // Récapitulatif
+    document.querySelector('.step-content[data-step="7"] .next-step')?.addEventListener('click', function() {
+        document.getElementById('recap-type').textContent = document.getElementById('type_logement')?.value || 'Non renseigné';
+        document.getElementById('recap-etat').textContent = document.getElementById('etat')?.value || 'Non renseigné';
+        document.getElementById('recap-localisation').textContent = 
+            (document.getElementById('ville')?.value || '') + ' - ' + 
+            (document.getElementById('quartier')?.value || '');
+        document.getElementById('recap-composition').textContent = 
+            (document.getElementById('nb_chambres')?.value || '0') + ' chambres, ' +
+            (document.getElementById('nb_salons')?.value || '0') + ' salons';
+        document.getElementById('recap-loyer').textContent = 
+            (document.getElementById('loyer_mensuel')?.value || '0') + ' $';
+    });
+
+    // Initialisation
+    updateStepper(1);
+});
+</script>
+{% endblock %}
+{% endblock %}
